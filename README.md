@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Tindera
 
-## Getting Started
+Mobile-first inventory and sales tracking app for Filipino sari-sari store owners.
 
-First, run the development server:
+The Problem
 
-```bash
+Sari-sari store owners run lean, solo operations — often tracking stock and sales from memory or a notebook, if at all. That costs real money in three ways: running out of fast-moving stock, restocking the wrong items because there's no visibility into what actually sells, and having no record to separate profit from revenue come tax season.
+
+Tindera is built around Aling Rosa, a solo store owner persona, with one goal: make stock and sales tracking fast enough that it doesn't get in the way of actually running the store.
+
+Features (MVP)
+
+Inventory management — add, edit, delete products; view quantity, threshold, and price at a glance
+Low stock alerts — products are automatically flagged when quantity drops to or below a set threshold
+Sales recording — log a sale in a few taps; inventory deducts automatically
+Dashboard — quick access to inventory, low-stock items, and account controls
+
+See SPEC.md for full scope, schema, and roadmap.
+
+Tech Stack
+
+Framework: Next.js 16 (App Router, Server Components, Server Actions)
+Language: TypeScript
+Styling: Tailwind CSS, shadcn/ui
+Database: MongoDB Atlas
+Validation: Zod
+Auth: Custom — Argon2 password hashing, session-based auth with HTTP-only cookies
+Deployment: Vercel
+
+Status
+
+🚧 In active development.
+
+Project scoped — user stories, MVP feature set, database schema
+MongoDB Atlas schema validated
+Brand system and lo-fi/hi-fi wireframes (Figma)
+Next.js project scaffolded
+Zod validation schemas
+Auth (signup, login, sessions)
+Inventory CRUD
+Sales recording
+Low stock dashboard
+
+Design
+
+Figma wireframes and hi-fi screens available on request. Brand palette:
+
+HexForest green#245424Olive-lime#84A83CGold yellow#F0C03CCream#FCF0E4
+
+Typeface: Plus Jakarta Sans
+
+Getting Started
+
+bashnpm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Author
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built by Rowel Timbal as a portfolio project.
