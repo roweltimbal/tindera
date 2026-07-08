@@ -9,6 +9,12 @@
   --color-olive-lime: #84A83C;
   --color-gold-yellow: #F0C03C;
   --color-cream: #FCF0E4;
+  --color-border-tan: #E8DFC8;
+  --color-muted-sage: #8A9A8A;
+  --color-body-sage: #3E4D3E;
+  --color-status-in-stock: #D6E0CC;
+  --color-status-low: #F7EFD9;
+  --color-tab-bar: #1A3F1A;
 }
 
 @theme inline {
