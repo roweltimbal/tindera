@@ -11,6 +11,7 @@ import { DesktopClosing } from "@/components/marketing/DesktopClosing";
 import { MobileClosing } from "@/components/marketing/MobileClosing";
 
 export default function Home() {
+
   return (
     <main className="flex min-h-screen flex-col overflow-x-clip bg-cream">
       {/* Mobile experience */}

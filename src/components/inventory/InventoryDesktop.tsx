@@ -5,8 +5,11 @@ import { sampleProducts } from "@/lib/data/sample-products";
 import { CategoryFilterChips } from "./CategoryFilterChips";
 import { ProductStatusBadge } from "./ProductStatusBadge";
 import { ProductImagePlaceholder } from "./ProductImagePlaceholder";
+import { getDb } from "@/lib/db";
 
-export function InventoryDesktop() {
+export async function InventoryDesktop() {
+  const db = await getDb();
+  const products = await db.collection("products").find().toArray()
   return (
     <div className="flex flex-1 flex-col items-center overflow-x-hidden py-12">
       <div className="flex w-full max-w-[1176px] flex-col gap-8 px-6">
