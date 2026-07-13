@@ -1,7 +1,6 @@
 import { PenSquare, Plus, Search, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { sampleProducts } from "@/lib/data/sample-products";
 import { CategoryFilterChips } from "./CategoryFilterChips";
 import { ProductStatusBadge } from "./ProductStatusBadge";
 import { ProductImagePlaceholder } from "./ProductImagePlaceholder";
@@ -33,7 +32,7 @@ export async function InventoryDesktop({products}: ProductProps) {
               Inventory
             </p>
             <p className="text-[15px] text-muted-sage">
-              128 products in catalog
+              {products.length} products in catalog
             </p>
           </div>
 
@@ -67,9 +66,9 @@ export async function InventoryDesktop({products}: ProductProps) {
           </div>
 
           <div className="flex flex-col">
-            {sampleProducts.map((product, index) => (
+            {products.map((product, index) => (
               <div
-                key={product.productName}
+                key={product._id}
                 className={cn(
                   "flex items-center border-b border-border-tan px-5 py-4 last:border-b-0",
                   index % 2 === 1 ? "bg-[#f9fbf9]" : "bg-white"
@@ -116,7 +115,7 @@ export async function InventoryDesktop({products}: ProductProps) {
 
         <div className="flex w-full items-center justify-between px-1">
           <p className="text-sm text-muted-sage">
-            Showing 1-6 of 128 products
+            Showing 1-6 of {products.length} products
           </p>
           <div className="flex gap-2">
             <Button
