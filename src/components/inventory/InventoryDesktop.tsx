@@ -5,11 +5,25 @@ import { sampleProducts } from "@/lib/data/sample-products";
 import { CategoryFilterChips } from "./CategoryFilterChips";
 import { ProductStatusBadge } from "./ProductStatusBadge";
 import { ProductImagePlaceholder } from "./ProductImagePlaceholder";
-import { getDb } from "@/lib/db";
 
-export async function InventoryDesktop() {
-  const db = await getDb();
-  const products = await db.collection("products").find().toArray()
+type ProductCategories = "Food & Snacks" | "Beverages" | "Cleaning Products" | "Alcohol"
+
+interface Product{
+  _id: string;
+  storeId: string;
+  productName: string;
+  category: ProductCategories;
+  price: number;
+  quantity: number;
+  threshold: number;
+}
+
+interface ProductProps{
+  products: Product[]
+}
+
+export async function InventoryDesktop({products}: ProductProps) {
+ 
   return (
     <div className="flex flex-1 flex-col items-center overflow-x-hidden py-12">
       <div className="flex w-full max-w-[1176px] flex-col gap-8 px-6">
