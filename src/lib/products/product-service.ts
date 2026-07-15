@@ -12,6 +12,10 @@ interface ProductDocument {
     threshold: number;
 }
 
+function escapeRegex(str: string) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 interface GetProductOptions {
     search?: string;
     category?: string;
@@ -23,10 +27,10 @@ export async function getProductsByStore(storeId: string, options: GetProductOpt
     const query: Record<string, unknown> = { storeId: new ObjectId(storeId) };
 
     if (options.search) {
-        query.productName = { $regex: options.search, $options: "i" };
+        query.productName = { $regex: escapeRegex(options.search), $options: "i" };
     }
 
-    if (options.category) {
+    if (options.category && options.category !== "All") {
         query.category = options.category
     }
 
