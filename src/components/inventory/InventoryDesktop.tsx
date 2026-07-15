@@ -1,9 +1,10 @@
-import { PenSquare, Plus, Search, Trash2 } from "lucide-react";
+import { PenSquare, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CategoryFilterChips } from "./CategoryFilterChips";
 import { ProductStatusBadge } from "./ProductStatusBadge";
 import { ProductImagePlaceholder } from "./ProductImagePlaceholder";
+import { ProductSearchInput } from "./ProductSearchInput";
 
 type ProductCategories = "Food & Snacks" | "Beverages" | "Cleaning Products" | "Alcohol"
 
@@ -37,12 +38,7 @@ export async function InventoryDesktop({products}: ProductProps) {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-80 items-center gap-2 rounded-xl border border-border-tan bg-white px-4">
-              <Search className="size-4 text-muted-sage" />
-              <span className="text-sm text-muted-sage">
-                Search products...
-              </span>
-            </div>
+            <ProductSearchInput className="w-80" />
             <Button
               variant="ghost"
               className="h-12 gap-2.5 rounded-xl bg-gold-yellow px-6 text-[15px] font-bold text-forest-green shadow-[0px_8px_8px_0px_rgba(240,192,60,0.19)] hover:bg-gold-yellow/90"
