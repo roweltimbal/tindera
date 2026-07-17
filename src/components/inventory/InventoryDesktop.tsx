@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { PenSquare, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -40,11 +41,14 @@ export async function InventoryDesktop({products}: ProductProps) {
           <div className="flex items-center gap-4">
             <ProductSearchInput className="w-80" />
             <Button
+              asChild
               variant="ghost"
               className="h-12 gap-2.5 rounded-xl bg-gold-yellow px-6 text-[15px] font-bold text-forest-green shadow-[0px_8px_8px_0px_rgba(240,192,60,0.19)] hover:bg-gold-yellow/90"
             >
-              <Plus className="size-[18px]" />
-              Add Product
+              <Link href="/dashboard/inventory/add-product">
+                <Plus className="size-[18px]" />
+                Add Product
+              </Link>
             </Button>
           </div>
         </div>
