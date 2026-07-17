@@ -1,7 +1,9 @@
 // Product/inventory business logic and MongoDB queries
 import { ObjectId, Decimal128 } from "mongodb"
 import { getDb } from "@/lib/db"
+import { AddProductCompleteSchema } from "../schemas/product.schema";
 
+// Types / Schema
 interface ProductDocument {
     _id: ObjectId;
     storeId: ObjectId;
@@ -11,6 +13,8 @@ interface ProductDocument {
     quantity: number;
     threshold: number;
 }
+
+type AddProductDocument = Omit<ProductDocument, "_id">
 
 function escapeRegex(str: string) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -42,4 +46,17 @@ export async function getProductsByStore(storeId: string, options: GetProductOpt
         storeId: product.storeId.toString(),
         price: parseFloat(product.price.toString()),
     }))
+}
+
+// add product to db
+
+
+export async function addProductToDb(product: AddProductCompleteSchema) {
+    const db = await getDb();
+    const productDoc = {
+        ...product,
+        price: Decimal128.fromString(product.price.toString())
+    }
+    const result = await db.collection<AddProductDocument>("products").insertOne(productDoc)
+    return result;
 }
