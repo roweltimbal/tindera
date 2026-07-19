@@ -60,3 +60,15 @@ export async function addProductToDb(product: AddProductCompleteSchema) {
     const result = await db.collection<AddProductDocument>("products").insertOne(productDoc)
     return result;
 }
+
+export async function deleteProduct({ productId, storeId }: { productId: string; storeId: string }) {
+    const db = await getDb();
+    const result = await db.collection("products").deleteOne({
+        _id: new ObjectId(productId),
+        storeId: new ObjectId(storeId),
+    });
+
+    if (result.deletedCount === 0) {
+        throw new Error("Product not found or already deleted");
+    }
+}
