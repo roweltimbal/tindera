@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { PenSquare, Plus, Trash2 } from "lucide-react";
+import { PenSquare, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CategoryFilterChips } from "./CategoryFilterChips";
 import { ProductStatusBadge } from "./ProductStatusBadge";
 import { ProductImagePlaceholder } from "./ProductImagePlaceholder";
 import { ProductSearchInput } from "./ProductSearchInput";
+import { DeleteProductButton } from "./DeleteProductButton";
 
 type ProductCategories = "Food & Snacks" | "Beverages" | "Cleaning Products" | "Alcohol"
 
@@ -100,13 +101,12 @@ export async function InventoryDesktop({products}: ProductProps) {
                   >
                     <PenSquare className="size-4" />
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="size-8 rounded-lg bg-destructive/10 text-destructive hover:bg-destructive/20"
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
+                  <DeleteProductButton
+                    product={{
+                      productId: product._id,
+                      productName: product.productName,
+                    }}
+                  />
                 </div>
               </div>
             ))}
