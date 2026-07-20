@@ -95,11 +95,14 @@ export async function InventoryDesktop({products}: ProductProps) {
                 </div>
                 <div className="flex w-[100px] items-center justify-end gap-2">
                   <Button
+                    asChild
                     variant="ghost"
                     size="icon"
                     className="size-8 rounded-lg bg-cream text-forest-green hover:bg-cream/70"
                   >
-                    <PenSquare className="size-4" />
+                    <Link href={`/dashboard/inventory/edit-product/${product._id}`}>
+                      <PenSquare className="size-4" />
+                    </Link>
                   </Button>
                   <DeleteProductButton
                     product={{
