@@ -46,6 +46,7 @@ function ProductSearchInputField({ className }: { className?: string }) {
       } else {
         params.delete("search");
       }
+      params.delete("page");
       router.push(`${pathname}?${params.toString()}`);
     }, 300);
   }

@@ -34,6 +34,7 @@ export function CategoryFilterChips({ size }: { size: "sm" | "lg" }) {
               } else {
                 params.set("category", filter.value);
               }
+              params.delete("page");
               router.push(`${pathname}?${params.toString()}`, { scroll: false });
             }}
           >

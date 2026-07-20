@@ -7,6 +7,8 @@ import { ProductStatusBadge } from "./ProductStatusBadge";
 import { ProductImagePlaceholder } from "./ProductImagePlaceholder";
 import { ProductSearchInput } from "./ProductSearchInput";
 import { DeleteProductButton } from "./DeleteProductButton";
+import { PaginationControls } from "./PaginationControls";
+import { ITEMS_PER_PAGE } from "@/lib/products/product-service";
 
 type ProductCategories = "Food & Snacks" | "Beverages" | "Cleaning Products" | "Alcohol"
 
@@ -21,11 +23,16 @@ interface Product{
 }
 
 interface ProductProps{
-  products: Product[]
+  products: Product[];
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
 }
 
-export async function InventoryDesktop({products}: ProductProps) {
- 
+export async function InventoryDesktop({products, currentPage, totalPages, totalCount}: ProductProps) {
+  const start = totalCount === 0 ? 0 : (currentPage - 1) * ITEMS_PER_PAGE + 1;
+  const end = Math.min(currentPage * ITEMS_PER_PAGE, totalCount);
+
   return (
     <div className="flex flex-1 flex-col items-center overflow-x-hidden py-12">
       <div className="flex w-full max-w-[1176px] flex-col gap-8 px-6">
@@ -35,7 +42,7 @@ export async function InventoryDesktop({products}: ProductProps) {
               Inventory
             </p>
             <p className="text-[15px] text-muted-sage">
-              {products.length} products in catalog
+              {totalCount} products in catalog
             </p>
           </div>
 
@@ -118,19 +125,9 @@ export async function InventoryDesktop({products}: ProductProps) {
 
         <div className="flex w-full items-center justify-between px-1">
           <p className="text-sm text-muted-sage">
-            Showing 1-6 of {products.length} products
+            Showing {start}-{end} of {totalCount} products
           </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              className="h-auto rounded-lg border-border-tan px-4 py-2 text-[13px] font-normal text-body-sage"
-            >
-              Previous
-            </Button>
-            <Button className="h-auto rounded-lg bg-forest-green px-4 py-2 text-[13px] font-bold text-white hover:bg-forest-green/90">
-              Next
-            </Button>
-          </div>
+          <PaginationControls currentPage={currentPage} totalPages={totalPages} />
         </div>
       </div>
     </div>
