@@ -20,10 +20,17 @@ function escapeRegex(str: string) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+export const ITEMS_PER_PAGE = 6;
+
 interface GetProductOptions {
     search?: string;
     category?: string;
-    // page, limit will slot in here later for pagination
+    currentPage?: number;
+}
+
+interface ProductFacetResult {
+    data: ProductDocument[];
+    totalCount: { count: number }[];
 }
 
 export async function getProductsByStore(storeId: string, options: GetProductOptions = {}) {
@@ -38,14 +45,35 @@ export async function getProductsByStore(storeId: string, options: GetProductOpt
         query.category = options.category
     }
 
-    const rawProducts = await db.collection<ProductDocument>("products").find(query).toArray();
+    const page = Number.isInteger(options.currentPage) && options.currentPage! > 0
+        ? options.currentPage!
+        : 1;
 
-    return rawProducts.map(product => ({
+    const [result] = await db.collection<ProductDocument>("products").aggregate<ProductFacetResult>([
+        { $match: query },
+        { $sort: { productName: 1 } },
+        {
+            $facet: {
+                data: [
+                    { $skip: (page - 1) * ITEMS_PER_PAGE },
+                    { $limit: ITEMS_PER_PAGE },
+                ],
+                totalCount: [{ $count: "count" }],
+            },
+        },
+    ]).toArray();
+
+    const totalCount = result.totalCount[0]?.count ?? 0;
+    const totalPages = Math.max(1, Math.ceil(totalCount / ITEMS_PER_PAGE));
+
+    const products = result.data.map(product => ({
         ...product,
         _id: product._id.toString(),
         storeId: product.storeId.toString(),
         price: parseFloat(product.price.toString()),
-    }))
+    }));
+
+    return { products, totalCount, totalPages };
 }
 
 // add product to db
