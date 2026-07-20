@@ -26,3 +26,15 @@ export const addProductCompleteSchema = addProductSchema.extend({
   storeId: z.instanceof(ObjectId),
 })
 export type AddProductCompleteSchema = z.infer<typeof addProductCompleteSchema>
+
+// Edit product form schema (validated in actions.ts against raw user input)
+export const editProductSchema = addProductSchema.extend({
+  productId: z.string().min(1),
+})
+export type EditProductSchema = z.infer<typeof editProductSchema>
+
+// Complete schema (edit form schema + storeId) — passed to product-service.ts
+export const editProductCompleteSchema = editProductSchema.extend({
+  storeId: z.instanceof(ObjectId),
+})
+export type EditProductCompleteSchema = z.infer<typeof editProductCompleteSchema>

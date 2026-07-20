@@ -1,7 +1,7 @@
 // Product/inventory business logic and MongoDB queries
 import { ObjectId, Decimal128 } from "mongodb"
 import { getDb } from "@/lib/db"
-import { AddProductCompleteSchema } from "../schemas/product.schema";
+import { AddProductCompleteSchema, EditProductCompleteSchema } from "../schemas/product.schema";
 
 // Types / Schema
 interface ProductDocument {
@@ -58,6 +58,40 @@ export async function addProductToDb(product: AddProductCompleteSchema) {
         price: Decimal128.fromString(product.price.toString())
     }
     const result = await db.collection<AddProductDocument>("products").insertOne(productDoc)
+    return result;
+}
+
+export async function getProductById({ productId, storeId }: { productId: string; storeId: string }) {
+    const db = await getDb();
+    const product = await db.collection<ProductDocument>("products").findOne({
+        _id: new ObjectId(productId),
+        storeId: new ObjectId(storeId),
+    });
+
+    if (!product) return null;
+
+    return {
+        ...product,
+        _id: product._id.toString(),
+        storeId: product.storeId.toString(),
+        price: parseFloat(product.price.toString()),
+    };
+}
+
+export async function editProductOnDb(product: EditProductCompleteSchema) {
+    const db = await getDb();
+    const result = await db.collection("products").updateOne(
+        { _id: new ObjectId(product.productId), storeId: product.storeId },
+        {
+            $set: {
+                productName: product.productName,
+                category: product.category,
+                price: Decimal128.fromString(product.price.toString()),
+                quantity: product.quantity,
+                threshold: product.threshold,
+            },
+        }
+    );
     return result;
 }
 
