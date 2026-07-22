@@ -67,6 +67,8 @@ src/
 
 **Auth flow** — on login, hash-verify with Argon2, write a signed session to an HTTP-only `Secure` cookie. On each protected request, read and validate the cookie server-side in the route's Server Component or middleware. No client-side auth state.
 
+**Desktop/Mobile pairs (current pattern)** — dashboard pages currently render both a `*Desktop` and `*Mobile` component (toggled with `lg:hidden` / `hidden lg:flex`), fed by a single data fetch in the page's Server Component — fetch once, pass the same props to both variants rather than fetching per variant. Interactive sub-pieces (search inputs, filter chips, pagination, delete-confirm dialogs) are self-contained client components that manage their own state via `useSearchParams`/`router.push` (URL state) instead of props, so they drop into either tree with no extra wiring. See `src/components/inventory/` for a working example. If a page has a good reason to deviate (e.g. state that shouldn't live in the URL), that's fine — this is the default, not a hard rule.
+
 ## Tailwind v4 — CSS-first config
 
 This project uses Tailwind v4, which has no `tailwind.config.js`. All theme customisation lives in `globals.css` using the `@theme` block. Brand tokens must be defined there:

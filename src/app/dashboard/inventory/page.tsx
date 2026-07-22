@@ -26,7 +26,7 @@ if (products.length === 0 && totalCount > 0 && requestedPage > totalPages) {
   return (
     <>
       <div className="flex lg:hidden">
-        <InventoryMobile />
+        <InventoryMobile products={products} currentPage={currentPage} totalPages={totalPages} totalCount={totalCount} />
       </div>
       <div className="hidden lg:flex">
         <InventoryDesktop products={products} currentPage={currentPage} totalPages={totalPages} totalCount={totalCount}/>
