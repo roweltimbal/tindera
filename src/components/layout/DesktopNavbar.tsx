@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -28,10 +29,11 @@ export function DesktopNavbar() {
           </NavigationMenuList>
         </NavigationMenu>
         <Button
+          asChild
           variant="outline"
           className="h-auto rounded-none border-white bg-transparent px-5 py-2 text-base font-normal text-white hover:bg-white/10 hover:text-white"
         >
-          Sign in
+          <Link href="/sign-in">Sign in</Link>
         </Button>
       </div>
     </header>

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { HeroPill } from "@/components/marketing/HeroPill";
 
@@ -11,8 +12,11 @@ export function MobileHero() {
       <p className="text-[16px] text-[#3e4d3e]">
         Track inventory, record sales, and know what&apos;s selling - right from your phone.
       </p>
-      <Button className="h-[54px] w-full rounded-[14px] bg-olive-lime text-base font-bold text-white hover:bg-olive-lime/90">
-        Get started - free
+      <Button
+        asChild
+        className="h-[54px] w-full rounded-[14px] bg-olive-lime text-base font-bold text-white hover:bg-olive-lime/90"
+      >
+        <Link href="/sign-up">Get started - free</Link>
       </Button>
     </section>
   );
