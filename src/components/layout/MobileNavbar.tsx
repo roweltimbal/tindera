@@ -1,4 +1,5 @@
 import { Menu } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -49,10 +50,11 @@ export function MobileNavbar() {
           <div className="px-4 pb-4">
             <SheetClose asChild>
               <Button
+                asChild
                 variant="outline"
                 className="h-auto w-full rounded-lg border-forest-green bg-transparent py-2.5 text-base text-forest-green hover:bg-forest-green/10 hover:text-forest-green"
               >
-                Sign in
+                <Link href="/sign-in">Sign in</Link>
               </Button>
             </SheetClose>
           </div>

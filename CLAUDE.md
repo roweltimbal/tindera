@@ -36,36 +36,44 @@ No test runner is configured yet. TypeScript checking runs as part of `next buil
 
 ## App Architecture
 
-The project is currently at scaffold stage. The planned App Router structure:
+Actual App Router structure (supersedes any earlier scaffold sketch):
 
 ```
 src/
   app/
     (auth)/
-      login/page.tsx
-      signup/page.tsx
-    (app)/
-      layout.tsx          # shared shell: nav, session check
-      dashboard/page.tsx  # low-stock summary, quick stats
-      inventory/page.tsx
-      sales/page.tsx
+      sign-in/{page.tsx,actions.ts,SignInForm.tsx}
+      sign-up/{page.tsx,actions.ts,SignUpForm.tsx}
+    dashboard/
+      layout.tsx           # shared shell: sidebar/tab bar (no session check wired yet)
+      page.tsx              # low-stock summary, quick stats
+      inventory/{page.tsx,actions.ts,add-product/,edit-product/[id]/}
+      record-sale/{page.tsx,actions.ts}
       low-stock/page.tsx
-    layout.tsx            # root layout: font, CSS vars
-    globals.css           # brand tokens live here (see below)
+      profile/page.tsx
+    layout.tsx             # root layout: font, CSS vars
+    globals.css            # brand tokens live here (see below)
   lib/
-    db.ts                 # MongoDB connection singleton
-    session.ts            # cookie read/write helpers
-  actions/                # Server Actions (one file per domain)
-    products.ts
-    sales.ts
-    auth.ts
+    db.ts                  # MongoDB connection singleton
+    auth/
+      auth-service.ts      # fat service: hashing/verification, user lookup
+      session.ts           # cookie read/write helpers
+    schemas/                # Zod schemas, one file per domain
+      product.schema.ts
+      user.schema.ts
+    products/product-service.ts
+    sales/sale-service.ts
 ```
 
-**Server Actions** handle all mutations (CRUD, login, logout). Keep them in `src/actions/` rather than colocated with pages to make them easy to find.
+**Server Actions live colocated with their page** (`actions.ts` next to `page.tsx`), not in a separate `src/actions/` directory — "thin actions, fat services": the action file does `formData.get()` + Zod `safeParse`, then calls a fat service function in `src/lib/<domain>/`. See `src/app/dashboard/inventory/add-product/actions.ts` + `src/lib/products/product-service.ts` as the reference pair.
+
+**Server Action error state** — every action exports a state type `{ error: string } | null` for use with `useActionState`. On validation failure, return `parsed.error.issues[0]?.message` (the *first* Zod issue only) — there is no per-field error map anywhere in this codebase. Render it once, at the bottom of the form: `{state?.error && <p className="text-sm text-destructive">{state.error}</p>}`. Keep new forms consistent with this rather than inventing a richer error shape.
+
+**Zod schema layering** — a base schema for form-facing fields, and where the service needs server-derived fields (e.g. `storeId` as an `ObjectId`), a second `*CompleteSchema` that `.extend()`s the base. See `src/lib/schemas/product.schema.ts`.
 
 **MongoDB** — use a module-level cached client in `src/lib/db.ts` to avoid opening a new connection on every request in dev (Next.js hot-reloads modules). Pattern: check `global._mongoClient`, create if absent, export `getDb()`.
 
-**Auth flow** — on login, hash-verify with Argon2, write a signed session to an HTTP-only `Secure` cookie. On each protected request, read and validate the cookie server-side in the route's Server Component or middleware. No client-side auth state.
+**Auth flow** — on login, hash-verify with Argon2, write a signed session to an HTTP-only `Secure` cookie. On each protected request, read and validate the cookie server-side in the route's Server Component or middleware. No client-side auth state. `src/lib/auth/auth-service.ts` and `src/lib/auth/session.ts` are stubs as of this writing — sign-in/sign-up UI and Zod schemas are real, but hashing/JWT/session-cookie logic is still TODO.
 
 **Desktop/Mobile pairs (current pattern)** — dashboard pages currently render both a `*Desktop` and `*Mobile` component (toggled with `lg:hidden` / `hidden lg:flex`), fed by a single data fetch in the page's Server Component — fetch once, pass the same props to both variants rather than fetching per variant. Interactive sub-pieces (search inputs, filter chips, pagination, delete-confirm dialogs) are self-contained client components that manage their own state via `useSearchParams`/`router.push` (URL state) instead of props, so they drop into either tree with no extra wiring. See `src/components/inventory/` for a working example. If a page has a good reason to deviate (e.g. state that shouldn't live in the URL), that's fine — this is the default, not a hard rule.
 
