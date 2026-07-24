@@ -3,19 +3,29 @@
 import argon2 from "argon2"
 import { getDb } from "../db"
 import { MongoServerError } from "mongodb"
+import { error } from "console"
 
 export async function validateAndSignIn(
   email: string,
   password: string
-): Promise<{ error: string } | { success: true }> {
-  await new Promise((resolve) => setTimeout(resolve, 800))
+): Promise<{ error: string } | { success: true, userId: string, storeId: string }> {
+ 
+  const db = await getDb()
+  try {
+    const userDoc = await db.collection("users").findOne({email: email})
+    if(!userDoc) {
+      return { error: "Invalid email or password" }
+    }
 
-  if (email === "fail@test.com") {
-    return { error: "Invalid email or password." }
+    const isValid = await argon2.verify(userDoc.passwordHash, password)
+    if(!isValid) {
+      return { error: "Invalid email or password" }
+    }
+    return {success: true, userId: userDoc._id.toString(), storeId: userDoc.storeId.toString() }
+  } catch (err) {
+    return { error: "Could not log you in" }
   }
 
-  return { success: true }
-  // TODO(rowel): replace with real Argon2 verify + JWT session creation
 }
 
 export async function signUpUser(input: {
