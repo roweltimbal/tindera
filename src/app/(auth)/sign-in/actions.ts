@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation"
 import { signInSchema } from "@/lib/schemas/user.schema"
 import { validateAndSignIn } from "@/lib/auth/auth-service"
+import { createUserSession } from "@/lib/auth/session"
 
 export type SignInActionState = { error: string } | null
 
@@ -24,10 +25,13 @@ export async function signInAction(
   }
 
   const result = await validateAndSignIn(parsed.data.email, parsed.data.password)
-
+  
   if ("error" in result) {
     return { error: result.error }
   }
+
+  // create user session
+  await createUserSession(result.userId, result.storeId)
 
   redirect("/dashboard")
 }
