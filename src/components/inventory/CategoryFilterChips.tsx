@@ -19,7 +19,7 @@ export function CategoryFilterChips({ size }: { size: "sm" | "lg" }) {
             type="button"
             key={filter.value}
             className={cn(
-              "rounded-full border font-medium whitespace-nowrap",
+              "cursor-pointer rounded-full border font-medium whitespace-nowrap",
               size === "lg"
                 ? "px-5 py-2.5 text-sm"
                 : "px-4 py-2 text-[13px]",

@@ -1,7 +1,8 @@
 import { InventoryDesktop } from "@/components/inventory/InventoryDesktop";
 import { InventoryMobile } from "@/components/inventory/InventoryMobile";
-import { getProductsByStore } from "@/lib/products/product-service"
-;
+import { getProductsByStore } from "@/lib/products/product-service";
+import { getUserSession } from "@/lib/auth/session"
+import {redirect } from "next/navigation"
 
 
 export default async function InventoryPage({ searchParams }: {
@@ -12,7 +13,13 @@ const { search, category, page } = await searchParams;
 const parsedPage = Number(page);
 const requestedPage = Number.isInteger(parsedPage) && parsedPage > 0 ? parsedPage : 1;
 
-const STORE_ID = "6a3ef76c40de4c3b847c2908" // TODO: replace with session storeId once auth lands
+
+const userSession = await getUserSession();
+if(!userSession) {
+  redirect("/sign-in")
+}
+
+const STORE_ID = userSession.storeId
 
 let { products, totalCount, totalPages } = await getProductsByStore(STORE_ID, {search, category, currentPage: requestedPage});
 

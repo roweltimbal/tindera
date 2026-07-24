@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "./nav-items";
+import { logoutAction } from "@/app/dashboard/actions";
 
 export function DashboardSidebar() {
   const pathname = usePathname();
@@ -14,10 +15,14 @@ export function DashboardSidebar() {
       <p className="text-[22px] font-extrabold text-white">Tindera</p>
 
       <nav className="flex flex-col gap-2">
-        <div className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-white">
+        <button
+          type="button"
+          onClick={() => logoutAction()}
+          className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-white"
+        >
           <LogOut className="size-[22px]" />
           <span className="text-[15px] font-medium">Log out</span>
-        </div>
+        </button>
 
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href;
