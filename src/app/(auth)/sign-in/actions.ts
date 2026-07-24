@@ -33,5 +33,5 @@ export async function signInAction(
   // create user session
   await createUserSession(result.userId, result.storeId)
 
-  redirect("/dashboard")
+  redirect("/dashboard/inventory")
 }
