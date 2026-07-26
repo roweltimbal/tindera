@@ -1,9 +1,9 @@
 // Auth business logic: password hashing/verification, user lookup
 // STUB — fake internals, real signatures. Replace with Argon2/MongoDB/JWT tomorrow.
+import "server-only"
 import argon2 from "argon2"
 import { getDb } from "../db"
 import { MongoServerError } from "mongodb"
-import { error } from "console"
 
 export async function validateAndSignIn(
   email: string,
@@ -68,6 +68,4 @@ export async function signUpUser(input: {
   }
 
   return { success: true }
-  
 }
-

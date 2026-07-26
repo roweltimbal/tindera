@@ -5,8 +5,7 @@ import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { editProductSchema, editProductCompleteSchema } from "@/lib/schemas/product.schema"
 import { editProductOnDb, deleteProduct } from "@/lib/products/product-service"
-
-const STORE_ID = "6a3ef76c40de4c3b847c2908" // TODO: replace with session storeId once auth lands
+import { validateUser } from "@/lib/auth/session"
 
 export type EditProductActionState = { error: string } | null
 
@@ -14,6 +13,11 @@ export async function editProductAction(
   _prevState: EditProductActionState,
   formData: FormData
 ): Promise<EditProductActionState> {
+  const auth = await validateUser()
+  if ("error" in auth) {
+    return { error: auth.error }
+  }
+
   const productId = formData.get("productId")
   const productName = formData.get("productName")
   const category = formData.get("category")
@@ -47,7 +51,7 @@ export async function editProductAction(
 
   const completeProduct = editProductCompleteSchema.parse({
     ...parsed.data,
-    storeId: new ObjectId(STORE_ID),
+    storeId: new ObjectId(auth.storeId),
   })
 
   await editProductOnDb(completeProduct)
@@ -62,6 +66,11 @@ export async function deleteProductAction(
   _prevState: DeleteProductActionState,
   formData: FormData
 ): Promise<DeleteProductActionState> {
+  const auth = await validateUser()
+  if ("error" in auth) {
+    return { error: auth.error }
+  }
+
   const productId = formData.get("productId")
 
   if (typeof productId !== "string") {
@@ -69,7 +78,7 @@ export async function deleteProductAction(
   }
 
   try {
-    await deleteProduct({ productId, storeId: STORE_ID })
+    await deleteProduct({ productId, storeId: auth.storeId })
   } catch {
     return { error: "Failed to delete product. Please try again." }
   }

@@ -1,12 +1,17 @@
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { getProductById } from "@/lib/products/product-service"
+import { getUserSession } from "@/lib/auth/session"
 import { EditProductForm } from "./EditProductForm"
-
-const STORE_ID = "6a3ef76c40de4c3b847c2908" // TODO: replace with session storeId once auth lands
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const product = await getProductById({ productId: id, storeId: STORE_ID })
+
+  const userSession = await getUserSession()
+  if (!userSession) {
+    redirect("/sign-in")
+  }
+
+  const product = await getProductById({ productId: id, storeId: userSession.storeId })
 
   if (!product) {
     notFound()

@@ -5,8 +5,7 @@ import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { addProductSchema, addProductCompleteSchema } from "@/lib/schemas/product.schema"
 import { addProductToDb } from "@/lib/products/product-service"
-
-const STORE_ID = "6a3ef76c40de4c3b847c2908" // TODO: replace with session storeId once auth lands
+import { validateUser } from "@/lib/auth/session"
 
 export type AddProductActionState = { error: string } | null
 
@@ -14,6 +13,11 @@ export async function addProduct(
   _prevState: AddProductActionState,
   formData: FormData
 ): Promise<AddProductActionState> {
+  const auth = await validateUser()
+  if ("error" in auth) {
+    return { error: auth.error }
+  }
+
   const productName = formData.get("productName")
   const category = formData.get("category")
   const price = formData.get("price")
@@ -44,7 +48,7 @@ export async function addProduct(
 
   const completeProduct = addProductCompleteSchema.parse({
     ...parsed.data,
-    storeId: new ObjectId(STORE_ID),
+    storeId: new ObjectId(auth.storeId),
   })
 
   const result = await addProductToDb(completeProduct)
