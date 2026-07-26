@@ -23,3 +23,12 @@ export const signUpSchema = z
     path: ["confirmPassword"],
   })
 export type SignUpSchema = z.infer<typeof signUpSchema>
+
+// Edit profile form schema (validated in actions.ts against raw user input)
+export const editProfileSchema = z.object({
+  firstName: z.string().min(1, "First name is required."),
+  lastName: z.string().min(1, "Last name is required."),
+  email: z.string().email("Enter a valid email address."),
+  storeName: z.string().min(1, "Store name is required."),
+})
+export type EditProfileSchema = z.infer<typeof editProfileSchema>
