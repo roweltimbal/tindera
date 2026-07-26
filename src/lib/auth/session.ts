@@ -53,6 +53,17 @@ export async function getUserSession() {
     }
 }
 
+// Validate user for Server Actions — returns {error} instead of throwing/redirecting
+export async function validateUser(): Promise<{ error: string } | { userId: string; storeId: string }> {
+    const session = await getUserSession()
+
+    if (!session) {
+        return { error: "You must be signed in to do that." }
+    }
+
+    return session
+}
+
 // Verify Session Token
 export async function verifySessionToken(token: string | undefined) {
     if(!token) {

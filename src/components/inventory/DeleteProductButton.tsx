@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { deleteProductAction } from "@/app/dashboard/inventory/actions"
+import { deleteProductByIdAction } from "@/app/dashboard/inventory/actions"
 
 interface DeleteProductButtonProps {
   product: {
@@ -28,7 +28,7 @@ export function DeleteProductButton({ product }: DeleteProductButtonProps) {
   async function handleDelete() {
     setError(null)
     try {
-      await deleteProductAction(product.productId)
+      await deleteProductByIdAction(product.productId)
       setOpen(false)
     } catch {
       setError("Failed to delete product. Please try again.")

@@ -2,10 +2,14 @@
 
 import { revalidatePath } from "next/cache"
 import { deleteProduct } from "@/lib/products/product-service"
+import { validateUser } from "@/lib/auth/session"
 
-const STORE_ID = "6a3ef76c40de4c3b847c2908" // TODO: replace with session storeId once auth lands
+export async function deleteProductByIdAction(productId: string) {
+  const auth = await validateUser()
+  if ("error" in auth) {
+    throw new Error(auth.error)
+  }
 
-export async function deleteProductAction(productId: string) {
-  await deleteProduct({ productId, storeId: STORE_ID })
+  await deleteProduct({ productId, storeId: auth.storeId })
   revalidatePath("/dashboard/inventory")
 }
