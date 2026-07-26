@@ -2,9 +2,9 @@ import { notFound, redirect } from "next/navigation";
 import { getUserSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/users/user-service";
 import { getStoreById } from "@/lib/stores/store-service";
-import { ProfileView } from "@/components/profile/ProfileView";
+import { EditProfileForm } from "@/components/profile/EditProfileForm";
 
-export default async function ProfilePage() {
+export default async function EditProfilePage() {
   const session = await getUserSession();
   if (!session) {
     redirect("/sign-in");
@@ -20,8 +20,9 @@ export default async function ProfilePage() {
   }
 
   return (
-    <ProfileView
-      name={`${user.firstName} ${user.lastName}`}
+    <EditProfileForm
+      firstName={user.firstName}
+      lastName={user.lastName}
       email={user.email}
       storeName={store.storeName}
     />
