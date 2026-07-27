@@ -7,6 +7,14 @@ import { editProductSchema, editProductCompleteSchema } from "@/lib/schemas/prod
 import { editProductOnDb, deleteProduct } from "@/lib/products/product-service"
 import { validateUser } from "@/lib/auth/session"
 
+const ALLOWED_RETURN_PATHS = ["/dashboard/inventory", "/dashboard/low-stock"]
+
+function resolveReturnTo(value: FormDataEntryValue | null) {
+  return typeof value === "string" && ALLOWED_RETURN_PATHS.includes(value)
+    ? value
+    : "/dashboard/inventory"
+}
+
 export type EditProductActionState = { error: string } | null
 
 export async function editProductAction(
@@ -17,6 +25,8 @@ export async function editProductAction(
   if ("error" in auth) {
     return { error: auth.error }
   }
+
+  const returnTo = resolveReturnTo(formData.get("returnTo"))
 
   const productId = formData.get("productId")
   const productName = formData.get("productName")
@@ -57,7 +67,8 @@ export async function editProductAction(
   await editProductOnDb(completeProduct)
 
   revalidatePath("/dashboard/inventory")
-  redirect("/dashboard/inventory")
+  revalidatePath("/dashboard/low-stock")
+  redirect(returnTo)
 }
 
 export type DeleteProductActionState = { error: string } | null
@@ -70,6 +81,8 @@ export async function deleteProductAction(
   if ("error" in auth) {
     return { error: auth.error }
   }
+
+  const returnTo = resolveReturnTo(formData.get("returnTo"))
 
   const productId = formData.get("productId")
 
@@ -84,5 +97,6 @@ export async function deleteProductAction(
   }
 
   revalidatePath("/dashboard/inventory")
-  redirect("/dashboard/inventory")
+  revalidatePath("/dashboard/low-stock")
+  redirect(returnTo)
 }

@@ -26,6 +26,7 @@ interface GetProductOptions {
     search?: string;
     category?: string;
     currentPage?: number;
+    lowStockOnly?: boolean;
 }
 
 interface ProductFacetResult {
@@ -45,13 +46,22 @@ export async function getProductsByStore(storeId: string, options: GetProductOpt
         query.category = options.category
     }
 
+    if (options.lowStockOnly) {
+        query.$expr = { $lte: ["$quantity", "$threshold"] };
+    }
+
     const page = Number.isInteger(options.currentPage) && options.currentPage! > 0
         ? options.currentPage!
         : 1;
 
     const [result] = await db.collection<ProductDocument>("products").aggregate<ProductFacetResult>([
         { $match: query },
-        { $sort: { productName: 1 } },
+        ...(options.lowStockOnly
+            ? [
+                { $addFields: { stockGap: { $subtract: ["$quantity", "$threshold"] } } },
+                { $sort: { stockGap: 1, productName: 1 } },
+            ]
+            : [{ $sort: { productName: 1 } }]),
         {
             $facet: {
                 data: [
