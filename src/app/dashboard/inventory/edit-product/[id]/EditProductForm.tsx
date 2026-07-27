@@ -30,9 +30,10 @@ interface EditProductFormProps {
     quantity: number
     threshold: number
   }
+  returnTo: string
 }
 
-export function EditProductForm({ product }: EditProductFormProps) {
+export function EditProductForm({ product, returnTo }: EditProductFormProps) {
   const [state, formAction, pending] = useActionState<EditProductActionState, FormData>(
     editProductAction,
     null
@@ -49,6 +50,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
         className="flex flex-col gap-6 rounded-2xl bg-white p-6 shadow-[0px_4px_24px_0px_rgba(36,84,36,0.1)]"
       >
         <input type="hidden" name="productId" defaultValue={product._id} />
+        <input type="hidden" name="returnTo" defaultValue={returnTo} />
 
         <div className="flex flex-col gap-2">
           <label htmlFor="productName" className="text-[13px] font-semibold text-forest-green">
@@ -170,7 +172,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
 
           <div className="flex items-center gap-4">
             <Link
-              href="/dashboard/inventory"
+              href={returnTo}
               className="text-sm font-medium text-body-sage hover:underline"
             >
               Cancel
@@ -188,6 +190,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
 
       <form id="delete-product-form" action={deleteFormAction} className="hidden">
         <input type="hidden" name="productId" defaultValue={product._id} />
+        <input type="hidden" name="returnTo" defaultValue={returnTo} />
       </form>
     </>
   )
