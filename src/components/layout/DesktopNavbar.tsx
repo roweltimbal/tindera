@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,6 +10,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Logo } from "@/components/layout/Logo";
 import { navLinks } from "@/components/layout/nav-links";
+import { scrollToVisibleSection } from "@/components/layout/scroll-to-section";
 
 export function DesktopNavbar() {
   return (
@@ -20,6 +23,12 @@ export function DesktopNavbar() {
               <NavigationMenuItem key={link.label}>
                 <NavigationMenuLink
                   href={link.href}
+                  onClick={(e) => {
+                    if (link.href.startsWith("#")) {
+                      e.preventDefault();
+                      scrollToVisibleSection(link.href);
+                    }
+                  }}
                   className="bg-transparent p-0 text-base font-normal text-white hover:bg-transparent hover:text-white focus:bg-transparent"
                 >
                   {link.label}
