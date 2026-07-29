@@ -27,6 +27,7 @@ interface GetProductOptions {
     category?: string;
     currentPage?: number;
     lowStockOnly?: boolean;
+    allResults?: boolean;
 }
 
 interface ProductFacetResult {
@@ -64,10 +65,12 @@ export async function getProductsByStore(storeId: string, options: GetProductOpt
             : [{ $sort: { productName: 1 } }]),
         {
             $facet: {
-                data: [
-                    { $skip: (page - 1) * ITEMS_PER_PAGE },
-                    { $limit: ITEMS_PER_PAGE },
-                ],
+                data: options.allResults
+                    ? []
+                    : [
+                        { $skip: (page - 1) * ITEMS_PER_PAGE },
+                        { $limit: ITEMS_PER_PAGE },
+                    ],
                 totalCount: [{ $count: "count" }],
             },
         },
