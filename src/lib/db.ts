@@ -31,3 +31,7 @@ export async function getDb() {
     const client = await clientPromise;
     return client.db("tindera")
 }
+
+export async function getClient() {
+    return await clientPromise;
+}

@@ -16,7 +16,7 @@ export default async function RecordSalePage({ searchParams }: {
 
   const STORE_ID = userSession.storeId;
 
-  const { products } = await getProductsByStore(STORE_ID, { search, category });
+  const { products } = await getProductsByStore(STORE_ID, { search, category, allResults: true });
 
   return (
     <>
