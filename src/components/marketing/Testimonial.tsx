@@ -8,7 +8,7 @@ const stats = [
 
 export function Testimonial() {
   return (
-    <section className="relative flex w-full flex-col items-center overflow-hidden bg-cream px-6 py-12 md:py-20">
+    <section id="about" className="relative flex w-full flex-col items-center overflow-hidden bg-cream px-6 py-12 md:py-20">
       <Image
         src="/assets/images/TinderaBGWebP.webp"
         alt=""

@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils";
 import {
   FacebookIcon,
   InstagramIcon,
-  XIcon,
   LinkedInIcon,
   YoutubeIcon,
 } from "@/components/icons/SocialIcons";
@@ -10,7 +9,6 @@ import {
 const socialLinks = [
   { label: "Facebook", Icon: FacebookIcon },
   { label: "Instagram", Icon: InstagramIcon },
-  { label: "X", Icon: XIcon },
   { label: "LinkedIn", Icon: LinkedInIcon },
   { label: "Youtube", Icon: YoutubeIcon },
 ];

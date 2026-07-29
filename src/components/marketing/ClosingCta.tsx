@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -30,13 +31,14 @@ export function ClosingCta({ size }: { size: "sm" | "lg" }) {
         Tindera is free during early access. No credit card needed.
       </p>
       <Button
+        asChild
         className={cn(
           "h-14 rounded-[14px] bg-gold-yellow text-[17px] font-extrabold text-forest-green hover:bg-gold-yellow/90",
           size === "sm" && "w-full",
           size === "lg" && "w-65"
         )}
       >
-        Get started
+        <Link href="/sign-up">Get started</Link>
       </Button>
     </div>
   );
