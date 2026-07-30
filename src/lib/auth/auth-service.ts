@@ -1,5 +1,4 @@
 // Auth business logic: password hashing/verification, user lookup
-// STUB — fake internals, real signatures. Replace with Argon2/MongoDB/JWT tomorrow.
 import "server-only"
 import argon2 from "argon2"
 import { getDb } from "../db"
@@ -22,7 +21,7 @@ export async function validateAndSignIn(
       return { error: "Invalid email or password" }
     }
     return {success: true, userId: userDoc._id.toString(), storeId: userDoc.storeId.toString() }
-  } catch (err) {
+  } catch {
     return { error: "Could not log you in" }
   }
 
